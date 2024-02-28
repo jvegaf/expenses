@@ -1,0 +1,124 @@
+openapi: 3.1.0
+info:
+  title: Shared Expenses API
+  version: 1.0.0
+paths:
+  /api/register:
+    post:
+      summary: User Registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: User registered successfully
+  /api/login:
+    post:
+      summary: User Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+  /api/shared-expenses:
+    get:
+      summary: Get List of Shared Expenses
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of shared expenses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    payer:
+                      type: string
+                    amount:
+                      type: number
+                    description:
+                      type: string
+                    paymentDate:
+                      type: string
+  /api/group/friends:
+    post:
+      summary: Add a Person to the Group
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        "200":
+          description: Person added to the group successfully
+  /api/expense:
+    post:
+      summary: Add an Expense
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payer:
+                  type: string
+                amount:
+                  type: number
+                description:
+                  type: string
+                paymentDate:
+                  type: string
+      responses:
+        "200":
+          description: Expense added successfully
+  /api/balance:
+    get:
+      summary: Get Group Balance
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Group balance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: object

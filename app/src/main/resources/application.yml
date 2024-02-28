@@ -1,0 +1,40 @@
+micronaut:
+  application:
+    name: expenses
+  security:
+    authentication: bearer
+    token:
+      jwt:
+        signatures:
+          secret:
+            generator:
+              secret: ${JWT_GENERATOR_SIGNATURE_SECRET:pleaseChangeThisSecretForANewOne}
+  router:
+    static-resources:
+      swagger:
+        paths: classpath:META-INF/swagger
+        mapping: /swagger/**
+      rapidoc:
+        paths: classpath:META-INF/swagger/views/rapidoc
+        mapping: /rapidoc/**
+  vertx:
+    mysql:
+      client:
+        port: 3306
+        host: the-host
+        database: the-db
+        user: user
+        password: password
+        maxSize: 5
+  jpa:
+    default:
+      properties:
+        hibernate:
+          hbm2ddl:
+            auto: update
+          connection:
+            db-type: mysql
+            url: jdbc:mariadb://localhost:3306/db
+            username: root
+            password: ""
+      reactive: true
