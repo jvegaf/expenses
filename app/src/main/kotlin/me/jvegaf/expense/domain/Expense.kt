@@ -1,9 +1,9 @@
-package me.jvegaf.domain.expense
+package me.jvegaf.expense.domain
 
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.*
-import me.jvegaf.domain.group.Group
-import me.jvegaf.domain.user.User
+import me.jvegaf.group.domain.Group
+import me.jvegaf.user.domain.User
 import java.util.Date
 
 @Serdeable

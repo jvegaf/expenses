@@ -1,4 +1,4 @@
-package me.jvegaf
+package me.jvegaf.expense.infrastructure
 
 import io.micronaut.http.annotation.Controller
 import io.micronaut.http.annotation.Get
