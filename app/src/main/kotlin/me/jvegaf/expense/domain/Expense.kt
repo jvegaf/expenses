@@ -6,28 +6,18 @@ import me.jvegaf.group.domain.Group
 import me.jvegaf.user.domain.User
 import java.util.Date
 
-@Serdeable
 @Entity
-@Table(name = "expenses")
-class Expense(
+data class Expense(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
+    @GeneratedValue
+    var id: Long?,
+    val amount: Double,
+    val description: String,
+    val paymentDate: Date,
 
-    @Column(name = "amount", nullable = false)
-    var amount: Double,
-
-    @Column(name = "description", nullable = false)
-    var description: String,
-
-    @Column(name = "payment_date", nullable = false)
-    var paymentDate: Date,
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     var payer: User,
 
-    @ManyToOne
-    @Column(name = "group_id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     var group: Group
 )

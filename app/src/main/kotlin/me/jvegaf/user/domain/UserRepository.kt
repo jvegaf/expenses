@@ -1,16 +1,10 @@
 package me.jvegaf.user.domain
 
-import jakarta.validation.constraints.NotBlank
-import me.jvegaf.shared.SortingAndOrderArguments
-import org.reactivestreams.Publisher
+import io.micronaut.data.annotation.Repository
+import io.micronaut.data.repository.CrudRepository
+import me.jvegaf.user.domain.User
 
-interface UserRepository {
-
-    fun findById(id: Long): Publisher<User?>
-
-    fun findByEmail(@NotBlank email: String): Publisher<User?>
-    fun findAll(args: SortingAndOrderArguments): Publisher<User?>
-    fun save(user: User): Publisher<User>
-    fun deleteById(id: Long)
-
+@Repository
+interface UserRepository: CrudRepository<User, Long>  {
+    fun findByEmail(email: String): User?
 }

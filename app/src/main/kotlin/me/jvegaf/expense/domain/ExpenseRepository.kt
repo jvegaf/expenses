@@ -1,16 +1,16 @@
 package me.jvegaf.expense.domain
 
-import me.jvegaf.group.domain.Group
-import me.jvegaf.user.domain.User
-import me.jvegaf.shared.SortingAndOrderArguments
-import org.reactivestreams.Publisher
+import io.micronaut.data.annotation.Join
+import io.micronaut.data.annotation.Repository
+import io.micronaut.data.jpa.repository.JpaSpecificationExecutor
+import io.micronaut.data.repository.CrudRepository
 
-interface ExpenseRepository {
-    fun findById(id: Long): Publisher<Expense?>
-    fun save(expense: Expense): Publisher<Expense>
-    fun deleteById(id: Long)
-    fun update(expense: Expense): Publisher<Int?>
-    fun findAll(args: SortingAndOrderArguments): Publisher<Expense?>
-    fun findAllByUser(user: User): Publisher<Expense?>
-    fun findAllByGroup(group: Group): Publisher<Expense?>
+@Repository
+interface ExpenseRepository: CrudRepository<Expense, Long> , JpaSpecificationExecutor<Expense> {
+
+//    @Join(value = "payer", type = Join.Type.FETCH)
+//    fun listByPayer(): List<Expense>
+
+//    @Join(value = "group", type = Join.Type.FETCH)
+//    fun listByGroup(): List<Expense>
 }

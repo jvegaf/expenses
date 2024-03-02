@@ -1,25 +1,18 @@
 package me.jvegaf.group.domain
 
-import io.micronaut.serde.annotation.Serdeable
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.*
-import me.jvegaf.expense.domain.Expense
 import me.jvegaf.user.domain.User
 
-@Serdeable
 @Entity
-@Table(name = "groups")
-class Group (
+data class Group (
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long,
+    @GeneratedValue
+    var id: Long?,
+    val name: String,
 
-    @Column(name = "name", nullable = false)
-    var name: String,
-
-    @OneToMany(mappedBy = "group")
-    var expenses: List<Expense>,
-
-    @OneToMany(mappedBy = "group")
-    var friends: List<User>
+    @ManyToMany(mappedBy = "groups")
+    @JsonIgnoreProperties("groups")
+    var friends: List<User> = mutableListOf(),
 
 )
