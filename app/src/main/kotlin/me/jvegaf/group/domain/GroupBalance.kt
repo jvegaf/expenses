@@ -1,4 +1,9 @@
 package me.jvegaf.group.domain
 
-class GroupBalance {
-}
+typealias GroupBalance = List<UserBalance>
+
+
+data class UserBalance(
+    val name: String,
+    val balance: Number
+)

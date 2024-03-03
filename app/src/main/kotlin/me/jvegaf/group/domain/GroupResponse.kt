@@ -4,6 +4,6 @@ import io.micronaut.serde.annotation.Serdeable
 
 @Serdeable
 data class GroupResponse(
-    val id: Long,
+    val id: Int,
     val name: String,
 )

@@ -3,6 +3,7 @@ package me.jvegaf.group.domain
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import io.micronaut.serde.annotation.Serdeable
 import jakarta.persistence.*
+import me.jvegaf.expense.domain.Expense
 import me.jvegaf.user.domain.User
 
 @Entity
@@ -11,13 +12,19 @@ import me.jvegaf.user.domain.User
 class Group(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null,
+    var id: Int? = null,
     var name: String,
 
-    @ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY, cascade = [ CascadeType.PERSIST, CascadeType.MERGE ])
     @JsonIgnoreProperties("groups")
-    var friends: List<User> = mutableListOf(),
+    var members: List<User> = mutableListOf(),
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = [ CascadeType.ALL ], orphanRemoval = true)
+    var expenses: List<Expense>? = mutableListOf(),
 ) {
+    fun totalExpenses(): Number {
+        return expenses?.sumOf { it.amount } ?: 0
+    }
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

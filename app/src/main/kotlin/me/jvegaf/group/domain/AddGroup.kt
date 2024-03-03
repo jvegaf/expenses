@@ -1,6 +1,6 @@
 package me.jvegaf.group.domain
 
-data class AddGroupRequest(
+data class AddGroup(
     val name: String,
-    val creator: Long,
+    val creator: Int,
 )

@@ -3,6 +3,7 @@ package me.jvegaf.expense.domain
 import jakarta.persistence.*
 import me.jvegaf.group.domain.Group
 import me.jvegaf.user.domain.User
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity
@@ -10,10 +11,10 @@ import java.util.*
 class Expense(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long? = null,
+    var id: Int? = null,
     var amount: Double,
     var description: String,
-    var paymentDate: Date,
+    var paymentDate: LocalDateTime,
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "payer_id", referencedColumnName = "id")
