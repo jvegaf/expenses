@@ -1,21 +1,20 @@
-package me.jvegaf.group.infrastructure
+package me.jvegaf.user.infrastructure
+
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
 import io.restassured.specification.RequestSpecification
 import org.junit.jupiter.api.Test
 
 @MicronautTest
-class GroupControllerTest {
-
+class UserControllerTest {
     @Test
-    fun shouldCreateANewGroup(spec: RequestSpecification) {
+    fun shouldCreateANewUser(spec: RequestSpecification) {
         spec
             .given()
             .contentType("application/json")
-            .body("{\"name\":\"the best\",\"creator\":1}")
+            .body("{\"name\":\"paul\"}")
             .`when`()
-            .post("/api/groups")
+            .post("/api/users")
             .then()
-            .statusCode(201)
+            .statusCode(200)
     }
-
 }

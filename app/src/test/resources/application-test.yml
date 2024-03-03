@@ -1,6 +1,6 @@
-jpa.default.properties.hibernate.connection.url: jdbc:tc:mariadb:10:///db
-
-test-resources:
-  containers:
-    mariadb:
-      image-name: mariadb:10.3
+# jpa.default.properties.hibernate.connection.url: jdbc:tc:mariadb:10:///db
+#
+# test-resources:
+#   containers:
+#     mariadb:
+#       image-name: mariadb:10.3

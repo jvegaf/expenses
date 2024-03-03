@@ -8,23 +8,16 @@ import me.jvegaf.user.domain.UserRepository
 class UserService(
     private val userRepository: UserRepository,
 ) {
-    fun registerUser(
-        email: String,
-        password: String,
-    ): User {
-        val user = User(null, email, password)
-        return userRepository.save(user)
-    }
 
-    fun loginUser(
-        email: String,
-        password: String,
-    ): User? {
-        return userRepository.findByEmail(email)
-            ?.takeIf { it.password == password }
+    fun save(user: User): User {
+        return userRepository.save(user)
     }
 
     fun findById(id: Long): User {
         return userRepository.findById(id).orElseThrow()
+    }
+
+    fun findByName(name: String): User? {
+        return userRepository.findByName(name)
     }
 }
