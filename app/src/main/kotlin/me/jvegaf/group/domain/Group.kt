@@ -17,13 +17,13 @@ class Group(
 
     @ManyToMany(mappedBy = "groups", fetch = FetchType.LAZY, cascade = [ CascadeType.PERSIST, CascadeType.MERGE ])
     @JsonIgnoreProperties("groups")
-    var members: List<User> = mutableListOf(),
+    var members: MutableList<User>? = mutableListOf(),
 
     @OneToMany(fetch = FetchType.EAGER, cascade = [ CascadeType.ALL ], orphanRemoval = true)
-    var expenses: List<Expense>? = mutableListOf(),
+    var expenses: MutableList<Expense>? = mutableListOf(),
 ) {
-    fun totalExpenses(): Number {
-        return expenses?.sumOf { it.amount } ?: 0
+    fun totalExpenses(): Double {
+        return (expenses?.sumOf { it.amount } ?: 0) as Double
     }
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

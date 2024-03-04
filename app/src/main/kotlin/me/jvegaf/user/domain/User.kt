@@ -21,7 +21,7 @@ class User(
         inverseJoinColumns = [JoinColumn(name = "group_id", referencedColumnName = "id")])
 
     @JsonIgnoreProperties("friends")
-    var groups: List<Group> = mutableListOf(),
+    var groups: MutableList<Group> = mutableListOf(),
 
 ) {
     override fun equals(other: Any?): Boolean {

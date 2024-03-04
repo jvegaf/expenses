@@ -15,11 +15,15 @@ class UserService(
         return userRepository.save(user)
     }
 
-    fun findById(id: Int): @NonNull Optional<User>? {
+    fun findById(id: Int): Optional<User> {
         return userRepository.findById(id)
     }
 
     fun findByName(name: String): User? {
         return userRepository.findByName(name)
+    }
+
+    fun findAll(): List<User> {
+        return userRepository.findAll()
     }
 }

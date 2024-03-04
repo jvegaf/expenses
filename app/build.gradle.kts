@@ -5,6 +5,7 @@ plugins {
     id("com.google.devtools.ksp") version "1.9.22-1.0.17"
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("io.micronaut.application") version "4.3.3"
+    id("io.micronaut.test-resources") version "4.3.3"
     id("io.micronaut.aot") version "4.3.3"
 }
 
@@ -33,10 +34,12 @@ dependencies {
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
-    runtimeOnly("com.h2database:h2")
+//    runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
     runtimeOnly("org.yaml:snakeyaml")
     testImplementation("io.micronaut:micronaut-http-client")
     testImplementation("io.micronaut.test:micronaut-test-rest-assured")
+    testImplementation("org.mockito:mockito-core")
 }
 
 
@@ -55,6 +58,9 @@ micronaut {
     processing {
         incremental(true)
         annotations("me.jvegaf.*")
+    }
+    testResources {
+        additionalModules.add("jdbc-mariadb")
     }
     aot {
     // Please review carefully the optimizations enabled below

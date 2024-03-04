@@ -3,7 +3,7 @@ package me.jvegaf.user.domain
 import io.micronaut.serde.annotation.Serdeable
 
 @Serdeable
-data class AddUserRequest(
+data class AddUser(
     val name: String,
 )
 

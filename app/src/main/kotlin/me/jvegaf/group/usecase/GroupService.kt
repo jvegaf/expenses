@@ -1,11 +1,9 @@
 package me.jvegaf.group.usecase
 
 import jakarta.inject.Singleton
-import me.jvegaf.group.domain.Group
-import me.jvegaf.group.domain.GroupBalance
-import me.jvegaf.group.domain.GroupRepository
-import me.jvegaf.group.domain.UserBalance
+import me.jvegaf.group.domain.*
 import me.jvegaf.user.domain.User
+import java.util.*
 
 @Singleton
 class GroupService(private val repository: GroupRepository) {
@@ -13,32 +11,30 @@ class GroupService(private val repository: GroupRepository) {
         return repository.save(group)
     }
 
-    fun findById(id: Int): Group? {
-        return repository.findById(id).orElse(null)
+    fun findById(id: Int): Optional<Group> {
+        return repository.findById(id)
     }
 
-    fun <User> addMember(groupId: Int, user: User): Group {
+    fun addMember(groupId: Int, user: User): Group {
         val group = repository.findById(groupId).orElseThrow()
-        group.members.plus(user)
+        group.members?.add(user)
         return repository.save(group)
 
     }
 
     fun removeMember(groupId: Int, user: User): Group {
         val group = repository.findById(groupId).orElseThrow()
-        group.members.minus(user)
+        group.members?.remove(user)
         return repository.save(group)
     }
 
     fun getBalance(groupId: Int): GroupBalance {
         val group = repository.findById(groupId).orElseThrow()
-        return group.members.map {
+        return group.members?.map { user ->
             val userExpensesTotal: Double? = group.expenses
-                ?.filter { it.id == it.payer.id }
-                ?.map { it.amount }
-                ?.sum()
-                ?.minus(group.totalExpenses())
-            UserBalance(it.name, userExpensesTotal ?: 0)
-        }
+                ?.filter { user.id == it.payer.id }?.sumOf { it.amount }
+                ?.minus(group.totalExpenses() / group.members!!.size)
+            UserBalance(user.name, userExpensesTotal ?: 0)
+        } ?: emptyList()
     }
 }
