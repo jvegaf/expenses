@@ -1,45 +1,68 @@
-import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpStatusCode,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, retry, throwError } from 'rxjs';
+import { Observable, catchError, map, retry, throwError } from 'rxjs';
 import { User } from './user.model';
 import { environment } from '../../environments/environment';
+import { Group } from '../groups/group.model';
+import { Expense } from '../expenses/expense.model';
 
 interface UserDTO {
   id: number;
   name: string;
 }
 
+interface ExpenseDTO {
+  id: number;
+  payer: UserDTO;
+  group: GroupDTO;
+  name: string;
+  amount: number;
+  paymentDate: Date;
+}
+
+interface GroupDTO {
+  id: number;
+  name: string;
+  members: UserDTO[];
+  expenses: ExpenseDTO[];
+}
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UsersService {
-
   private usersUrl = environment.apiUrl + '/users';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getUsers(): Observable<User[]> {
     return this.http.get<UserDTO[]>(this.usersUrl).pipe(
-      map(users => users.map(user => {
-        return this.convertToUser(user);
-      })),
+      map((users: any[]) =>
+        users.map((user) => {
+          return this.convertToUser(user);
+        }),
+      ),
       retry(2),
-      catchError(this.handleError)
+      catchError(this.handleError),
     );
   }
 
   getUser(id: number): Observable<User> {
-    return this.http.get<UserDTO>(`${this.usersUrl}/${id}`).pipe(
-      map(user => this.convertToUser(user))
-    )
+    return this.http
+      .get<UserDTO>(`${this.usersUrl}/${id}`)
+      .pipe(map((user) => this.convertToUser(user)));
   }
 
   addUser(name: string): Observable<User> {
-    return this.http.post<UserDTO>(this.usersUrl, {
-      name: name,
-    }).pipe(
-      map(user => this.convertToUser(user))
-    );
+    return this.http
+      .post<UserDTO>(this.usersUrl, {
+        name: name,
+      })
+      .pipe(map((user) => this.convertToUser(user)));
   }
 
   private convertToUser(user: UserDTO): User {
@@ -49,8 +72,39 @@ export class UsersService {
     };
   }
 
+  private convertToGroup(group: GroupDTO): Group {
+    return {
+      id: group.id,
+      name: group.name,
+      members: group.members.map((m) => this.convertToUser(m)),
+      expenses: group.expenses.map((e) => this.convertToExpense(e)),
+    };
+  }
+  convertToExpense(e: ExpenseDTO): Expense {
+    return {
+      id: e.id,
+      payer: this.convertToUser(e.payer),
+      group: this.convertToGroup(e.group),
+      name: e.name,
+      amount: e.amount,
+      paymentDate: e.paymentDate,
+    };
+  }
+
+  getGroups(userId: number): Observable<Group[]> {
+    return this.http.get<GroupDTO[]>(`${this.usersUrl}/${userId}/groups`).pipe(
+    map((groups: any[]) =>
+      groups.map((group) => {
+        return this.convertToGroup(group);
+      }),
+    ),
+      retry(2),
+      catchError(this.handleError),
+    );
+  }
+
   private handleError(error: HttpErrorResponse) {
-    switch(error.status) {
+    switch (error.status) {
       case 0:
         console.error('Client error:', error.error);
         break;
@@ -64,4 +118,5 @@ export class UsersService {
         console.error('Uknown error:', error.error);
     }
     return throwError(() => error);
-  }}
+  }
+}
